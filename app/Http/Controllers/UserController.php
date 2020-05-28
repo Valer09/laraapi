@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
+    public  function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +26,6 @@ class UserController extends Controller
                'data' => User::get(),
                'success' => true
            ]) ;
-
     }
 
     /**
@@ -46,7 +51,7 @@ class UserController extends Controller
 
             $postData= $request->except('id', '_method');
 
-            $postData['password'] = Hash::make('ciaociao');
+            $postData['password'] = Hash::make($postData['password'] ?? 'password');
 
             $user -> fill($postData);
             $success = $user -> save();
